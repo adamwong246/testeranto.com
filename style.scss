@@ -1,0 +1,71 @@
+@import "./node_modules/bootstrap/scss/bootstrap.scss";
+@import "./node_modules/testeranto-stilo/style.scss";
+
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-snap-type: y mandatory;
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: "M PLUS Rounded 1c", sans-serif;
+  color: var(--dark);
+  line-height: 1.6;
+  position: relative;
+  transition: background-color 0.3s ease;
+}
+
+.snap-section {
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+  height: 100vh;
+  width: 100%;
+  position: relative;
+}
+
+.snap-container {
+  height: 100vh;
+  overflow-y: scroll;
+  scroll-snap-type: y mandatory;
+  scroll-behavior: smooth;
+}
+
+@keyframes gradientBG {
+  0%,
+  100% {
+    background-position: 0% 50%, 0% 0%;
+  }
+  25% {
+    background-position: 100% 50%, 100% 50%;
+  }
+  50% {
+    background-position: 50% 100%, 50% 100%;
+  }
+  75% {
+    background-position: 100% 0%, 0% 100%;
+  }
+}
+
+@keyframes rotateGradient {
+  0% {
+    --angle: 45deg;
+  }
+  100% {
+    --angle: 405deg;
+  }
+}
+
+@keyframes ripple {
+  0%,
+  100% {
+    background-size: 300% 300%, 100% 100%;
+  }
+  50% {
+    background-size: 300% 300%, 200% 200%;
+  }
+}

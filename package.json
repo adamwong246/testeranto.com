@@ -1,0 +1,22 @@
+{
+  "name": "testeranto.com",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "adam wong <adamwong246@gmail.com>",
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "build": "tsx --watch build.ts",
+    "serve": "python3 -m http.server 8000"
+  },
+  "dependencies": {
+    "bootstrap": "^5.3.7",
+    "micromark": "^4.0.2",
+    "micromark-extension-gfm-table": "^2.1.1",
+    "sass": "^1.90.0",
+    "stilo": "^0.0.1",
+    "testeranto": "^0.189.0",
+    "testeranto-stilo": "^0.0.2",
+    "tsx": "^4.20.4"
+  }
+}
