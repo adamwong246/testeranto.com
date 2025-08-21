@@ -2,7 +2,8 @@ import fs from "fs";
 import path from "path";
 import { micromark } from "micromark";
 import { gfmTable, gfmTableHtml } from "micromark-extension-gfm-table";
-import * as sass from "sass";
+import * as esbuild from "esbuild";
+import { sassPlugin } from "esbuild-sass-plugin";
 
 const template = (title, content) => `
 <!DOCTYPE html>
@@ -143,68 +144,71 @@ const main = async () => {
     fs.writeFileSync(path.join(outDir, "docs.html"), docsHtml);
     console.log("Generated: docs.html");
 
-    // Process styling - compile ./style.scss -> ./style.css
+    // Process styling using esbuild
     try {
-        const scssPath = "./style.scss";
-        if (fs.existsSync(scssPath)) {
-            const result = sass.compile(scssPath);
-            fs.writeFileSync(path.join(outDir, "style.css"), result.css);
-            console.log("Generated: style.css");
-        } else {
-            console.warn(`SCSS file not found at ${scssPath}, skipping style compilation`);
-        }
+        await esbuild.build({
+            entryPoints: ["./src/style.scss"],
+            outfile: path.join(outDir, "style.css"),
+            bundle: true,
+            minify: true,
+            plugins: [sassPlugin()],
+            loader: {
+                '.ttf': 'file'
+            }
+        });
+        console.log("Generated: style.css");
     } catch (err) {
-        console.error("Error compiling SCSS:", err);
-        // Don't exit the process, as other files may have been generated successfully
+        console.error("Error compiling SCSS with esbuild:", err);
+        process.exit(-1);
     }
 
     // Copy fonts from testeranto-stilo package
-    try {
-        const fontsSourceDir = "./node_modules/testeranto-stilo/fonts";
-        const fontsDestDir = path.join(outDir, "fonts");
+    // try {
+    //     const fontsSourceDir = "./node_modules/testeranto-stilo/fonts";
+    //     const fontsDestDir = path.join(outDir, "fonts");
         
-        if (fs.existsSync(fontsSourceDir)) {
-            // Create destination directory if it doesn't exist
-            if (!fs.existsSync(fontsDestDir)) {
-                fs.mkdirSync(fontsDestDir, { recursive: true });
-            }
+    //     if (fs.existsSync(fontsSourceDir)) {
+    //         // Create destination directory if it doesn't exist
+    //         if (!fs.existsSync(fontsDestDir)) {
+    //             fs.mkdirSync(fontsDestDir, { recursive: true });
+    //         }
             
-            // Copy all items from source to destination, handling both files and directories
-            const copyRecursiveSync = function(src: string, dest: string) {
-                const exists = fs.existsSync(src);
-                const stats = exists && fs.statSync(src);
-                const isDirectory = exists && stats.isDirectory();
+    //         // Copy all items from source to destination, handling both files and directories
+    //         const copyRecursiveSync = function(src: string, dest: string) {
+    //             const exists = fs.existsSync(src);
+    //             const stats = exists && fs.statSync(src);
+    //             const isDirectory = exists && stats.isDirectory();
                 
-                if (isDirectory) {
-                    if (!fs.existsSync(dest)) {
-                        fs.mkdirSync(dest, { recursive: true });
-                    }
-                    fs.readdirSync(src).forEach(function(childItemName) {
-                        copyRecursiveSync(
-                            path.join(src, childItemName),
-                            path.join(dest, childItemName)
-                        );
-                    });
-                } else {
-                    fs.copyFileSync(src, dest);
-                    console.log(`Copied: ${dest.replace(outDir + '/', '')}`);
-                }
-            };
+    //             if (isDirectory) {
+    //                 if (!fs.existsSync(dest)) {
+    //                     fs.mkdirSync(dest, { recursive: true });
+    //                 }
+    //                 fs.readdirSync(src).forEach(function(childItemName) {
+    //                     copyRecursiveSync(
+    //                         path.join(src, childItemName),
+    //                         path.join(dest, childItemName)
+    //                     );
+    //                 });
+    //             } else {
+    //                 fs.copyFileSync(src, dest);
+    //                 console.log(`Copied: ${dest.replace(outDir + '/', '')}`);
+    //             }
+    //         };
             
-            // Copy each item in the fonts directory
-            const items = fs.readdirSync(fontsSourceDir);
-            for (const item of items) {
-                const sourcePath = path.join(fontsSourceDir, item);
-                const destPath = path.join(fontsDestDir, item);
-                copyRecursiveSync(sourcePath, destPath);
-            }
-        } else {
-            console.warn(`Fonts directory not found at ${fontsSourceDir}, skipping font copy`);
-        }
-    } catch (err) {
-        console.error("Error copying fonts:", err);
-        // Don't exit the process, as other files may have been generated successfully
-    }
+    //         // Copy each item in the fonts directory
+    //         const items = fs.readdirSync(fontsSourceDir);
+    //         for (const item of items) {
+    //             const sourcePath = path.join(fontsSourceDir, item);
+    //             const destPath = path.join(fontsDestDir, item);
+    //             copyRecursiveSync(sourcePath, destPath);
+    //         }
+    //     } else {
+    //         console.warn(`Fonts directory not found at ${fontsSourceDir}, skipping font copy`);
+    //     }
+    // } catch (err) {
+    //     console.error("Error copying fonts:", err);
+    //     // Don't exit the process, as other files may have been generated successfully
+    // }
       
   } catch (err) {
     console.error("Error compiling docs:", err);

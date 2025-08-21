@@ -1,5 +1,5 @@
-@import "../node_modules/bootstrap/scss/bootstrap.scss";
-@import "../node_modules/testeranto-stilo/style.scss";
+// @import "../node_modules/bootstrap/scss/bootstrap.scss";
+@import "../node_modules/testeranto-stilo/src/style.scss";
 
 html, body {
   height: 100%;
@@ -13,7 +13,7 @@ html {
 }
 
 body {
-  font-family: "M PLUS Rounded 1c", sans-serif;
+
   color: var(--dark);
   line-height: 1.6;
   position: relative;

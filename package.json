@@ -11,12 +11,13 @@
   },
   "dependencies": {
     "bootstrap": "^5.3.7",
+    "esbuild": "^0.25.9",
     "micromark": "^4.0.2",
     "micromark-extension-gfm-table": "^2.1.1",
     "sass": "^1.90.0",
     "stilo": "^0.0.1",
     "testeranto": "^0.189.0",
-    "testeranto-stilo": "0.0.4",
+    "testeranto-stilo": "0.0.7",
     "tsx": "^4.20.4"
   }
 }

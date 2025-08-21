@@ -3957,7 +3957,7 @@ esbuild@0.17.5:
     "@esbuild/win32-ia32" "0.17.5"
     "@esbuild/win32-x64" "0.17.5"
 
-esbuild@~0.25.0:
+esbuild@^0.25.9, esbuild@~0.25.0:
   version "0.25.9"
   resolved "https://registry.yarnpkg.com/esbuild/-/esbuild-0.25.9.tgz#15ab8e39ae6cdc64c24ff8a2c0aef5b3fd9fa976"
   integrity sha512-CRbODhYyQx3qp7ZEwzxOk4JBqmD/seJrzPa/cGjY1VtIn5E09Oi9/dB4JwctnfZ8Q8iT7rioVv5k/FNT/uf54g==
@@ -7067,10 +7067,10 @@ test-exclude@^6.0.0:
     glob "^7.1.4"
     minimatch "^3.0.4"
 
-testeranto-stilo@0.0.4:
-  version "0.0.4"
-  resolved "https://registry.yarnpkg.com/testeranto-stilo/-/testeranto-stilo-0.0.4.tgz#f3a2976f901244db104d623de67f238dabd143bd"
-  integrity sha512-CMf+vxYaToNrjDwSfEh7h2aoB9Po670JWUfrPpdNnYdDIGGhnUCHn6NzXWMni+meoSYLbBTXWgPNNYBcNZ5TxQ==
+testeranto-stilo@0.0.7:
+  version "0.0.7"
+  resolved "https://registry.yarnpkg.com/testeranto-stilo/-/testeranto-stilo-0.0.7.tgz#c4d755c029c882a0372f8898f6ab802f4573010c"
+  integrity sha512-DdJKiIZWKrIzosPDSb9wkMM/nQ7T5u0BkzdS+b6PZBlH1q7IdCsMxwxiTQWCgmtHxB/gCQDsFnJ/FAxmIm/2GA==
   dependencies:
     "@types/marked" "^6.0.0"
     "@types/recursive-readdir" "^2.2.4"
