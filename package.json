@@ -16,7 +16,7 @@
     "sass": "^1.90.0",
     "stilo": "^0.0.1",
     "testeranto": "^0.189.0",
-    "testeranto-stilo": "^0.0.2",
+    "testeranto-stilo": "^0.0.3",
     "tsx": "^4.20.4"
   }
 }

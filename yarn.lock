@@ -7067,10 +7067,10 @@ test-exclude@^6.0.0:
     glob "^7.1.4"
     minimatch "^3.0.4"
 
-testeranto-stilo@^0.0.2:
-  version "0.0.2"
-  resolved "https://registry.yarnpkg.com/testeranto-stilo/-/testeranto-stilo-0.0.2.tgz#01177ec3c47dcc885fdc015f92203b2c154c558e"
-  integrity sha512-Wu63DHwYhlP4h54OPlPqQd1LHv+aEMVX0RZjRPdEZSY6Wea/KyIDsBfOUfAXHmPYupFybYfw4c2W7Mq7/c84ug==
+testeranto-stilo@^0.0.3:
+  version "0.0.3"
+  resolved "https://registry.yarnpkg.com/testeranto-stilo/-/testeranto-stilo-0.0.3.tgz#0b07fcb7fa3dc4d0bc62c9831e2a59832bdf665b"
+  integrity sha512-A2aI4+p56D3pjL9I85rFMTkTAyb0p9eo4wG0wf0FJ62tRRXz6nhCdhR9IiWeK/y0oqN5yPRVxtIJF7Nbo8RGxw==
   dependencies:
     "@types/marked" "^6.0.0"
     "@types/recursive-readdir" "^2.2.4"
