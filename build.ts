@@ -52,7 +52,7 @@ const template = (title, content) => `
 
 <body>
 
-    <div class="container-fluid" style="padding-bottom: 5rem;">
+    <div id="root" class="container-fluid" style="padding-bottom: 5rem;">
         <div class="row">
 
             <div class="col-xs-12 col-sm-12 col-md-12">
@@ -63,38 +63,8 @@ const template = (title, content) => `
         
 
         </div>
+
     </div>
-
-    <div class="container-fluid">
-        <nav class="navbar fixed-bottom navbar-light bg-light">
-            <div class="container-fluid justify-content-center">
-                <ul class="nav">
-                    <li class="nav-item">
-                        <a class="nav-link" href="index.html">Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="README.html">README</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="docs.html">Docs</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="https://github.com/adamwong246/testeranto" target="_blank">GitHub</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="https://www.npmjs.com/package/testeranto" target="_blank">NPM</a>
-                    </li>
-                </ul>
-            </div>
-        </nav>
-    </div>
-
-
-
-
-    
-
-    
 
 </div>
 
@@ -103,7 +73,6 @@ const template = (title, content) => `
 </body>
 </html>
 `;
-
 
 const processFile = (filePath) => {
   const markdown = fs.readFileSync(filePath, "utf8");
@@ -115,6 +84,51 @@ const processFile = (filePath) => {
   return template(path.basename(filePath), html);
 };
 
+// Build function that can be reused
+const buildAll = async () => {
+    // Process frontpage
+    const frontpageContent = fs.readFileSync(
+        "templates/frontpage.html",
+        "utf8"
+    );
+    fs.writeFileSync(
+        path.join("./", "index.html"),
+        template("Testeranto", frontpageContent)
+    );
+    console.log("Generated: index.html");
+
+    // Process README.md
+    try {
+        const readmeHtml = processFile("./README.md");
+        fs.writeFileSync(path.join("./", "README.html"), readmeHtml);
+        console.log("Generated: README.html");
+    } catch (err) {
+        console.error("Error processing README.md:", err);
+    }
+
+    // Process docs
+    const docsHtml = processFile("templates/docs.md");
+    fs.writeFileSync(path.join("./", "docs.html"), docsHtml);
+    console.log("Generated: docs.html");
+
+    // Process styling using esbuild
+    try {
+        await esbuild.build({
+            entryPoints: ["./src/style.scss"],
+            outfile: path.join("./", "style.css"),
+            bundle: true,
+            minify: true,
+            plugins: [sassPlugin()],
+            loader: {
+                ".ttf": "file",
+            },
+        });
+        console.log("Generated: style.css");
+    } catch (err) {
+        console.error("Error compiling SCSS with esbuild:", err);
+    }
+};
+
 const main = async () => {
   try {
     // Create docs-output directory if it doesn't exist
@@ -123,62 +137,55 @@ const main = async () => {
       fs.mkdirSync(outDir);
     }
 
-    // Process frontpage
-    const frontpageContent = fs.readFileSync(
-      "templates/frontpage.html",
-      "utf8"
-    );
-    fs.writeFileSync(
-      path.join(outDir, "index.html"),
-      template("Testeranto", frontpageContent)
-    );
-    console.log("Generated: index.html");
+    // Initial build
+    await buildAll();
 
-    // Process README from local README.md
-    const readmeHtml = processFile("./node_modules/testeranto/README.md");
-    fs.writeFileSync(path.join(outDir, "README.html"), readmeHtml);
-    console.log("Generated: README.html");
-
-    // Process docs
-    const docsHtml = processFile("templates/docs.md");
-    fs.writeFileSync(path.join(outDir, "docs.html"), docsHtml);
-    console.log("Generated: docs.html");
-
-    // Process styling using esbuild
-    try {
-        await esbuild.build({
-            entryPoints: ["./src/style.scss"],
-            outfile: path.join(outDir, "style.css"),
-            bundle: true,
-            minify: true,
-            plugins: [sassPlugin()],
-            loader: {
-                '.ttf': 'file'
+    // Watch for changes if --watch flag is present
+    if (process.argv.includes('--watch')) {
+        console.log('Watching for changes...');
+        
+        // Watch templates
+        fs.watch('templates', { recursive: true }, (eventType, filename) => {
+            if (filename) {
+                console.log(`File ${filename} changed. Rebuilding...`);
+                buildAll();
             }
         });
-        console.log("Generated: style.css");
-    } catch (err) {
-        console.error("Error compiling SCSS with esbuild:", err);
-        process.exit(-1);
+        
+        // Watch src directory
+        fs.watch('src', { recursive: true }, (eventType, filename) => {
+            if (filename) {
+                console.log(`File ${filename} changed. Rebuilding...`);
+                buildAll();
+            }
+        });
+        
+        // Watch README.md
+        fs.watch('./README.md', (eventType, filename) => {
+            if (filename) {
+                console.log(`File ${filename} changed. Rebuilding...`);
+                buildAll();
+            }
+        });
     }
 
     // Copy fonts from testeranto-stilo package
     // try {
     //     const fontsSourceDir = "./node_modules/testeranto-stilo/fonts";
     //     const fontsDestDir = path.join(outDir, "fonts");
-        
+
     //     if (fs.existsSync(fontsSourceDir)) {
     //         // Create destination directory if it doesn't exist
     //         if (!fs.existsSync(fontsDestDir)) {
     //             fs.mkdirSync(fontsDestDir, { recursive: true });
     //         }
-            
+
     //         // Copy all items from source to destination, handling both files and directories
     //         const copyRecursiveSync = function(src: string, dest: string) {
     //             const exists = fs.existsSync(src);
     //             const stats = exists && fs.statSync(src);
     //             const isDirectory = exists && stats.isDirectory();
-                
+
     //             if (isDirectory) {
     //                 if (!fs.existsSync(dest)) {
     //                     fs.mkdirSync(dest, { recursive: true });
@@ -194,7 +201,7 @@ const main = async () => {
     //                 console.log(`Copied: ${dest.replace(outDir + '/', '')}`);
     //             }
     //         };
-            
+
     //         // Copy each item in the fonts directory
     //         const items = fs.readdirSync(fontsSourceDir);
     //         for (const item of items) {
@@ -209,7 +216,6 @@ const main = async () => {
     //     console.error("Error copying fonts:", err);
     //     // Don't exit the process, as other files may have been generated successfully
     // }
-      
   } catch (err) {
     console.error("Error compiling docs:", err);
     process.exit(1);
