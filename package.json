@@ -6,18 +6,19 @@
   "license": "MIT",
   "type": "module",
   "scripts": {
-    "build": "tsx --watch build.ts",
-    "serve": "python3 -m http.server 8000"
+    "build": "tsx build.ts",
+    "watch": "tsx build.ts --watch",
+    "serve": "python3 -m http.server 8000",
+    "dev": "concurrently \"yarn watch\" \"yarn serve\""
   },
-  "dependencies": {
-    "bootstrap": "^5.3.7",
+  "devDependencies": {
+    "concurrently": "^9.2.1",
     "esbuild": "^0.25.9",
     "micromark": "^4.0.2",
     "micromark-extension-gfm-table": "^2.1.1",
     "sass": "^1.90.0",
-    "stilo": "^0.0.1",
     "testeranto": "^0.189.0",
-    "testeranto-stilo": "0.0.7",
+    "testeranto-stilo": "0.0.11",
     "tsx": "^4.20.4"
   }
 }

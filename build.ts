@@ -19,7 +19,6 @@ const template = (title, content) => `
 
     <!-- load style AFTER prism -->
     <link rel="stylesheet" href="style.css">
-    
 
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-2BREL4738L"></script>
@@ -127,6 +126,14 @@ const buildAll = async () => {
     } catch (err) {
         console.error("Error compiling SCSS with esbuild:", err);
     }
+    
+    // Copy newStyle.css
+    // try {
+    //     fs.copyFileSync("newStyle.css", path.join("./", "newStyle.css"));
+    //     console.log("Copied: newStyle.css");
+    // } catch (err) {
+    //     console.error("Error copying newStyle.css:", err);
+    // }
 };
 
 const main = async () => {
