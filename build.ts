@@ -117,6 +117,8 @@ const buildAll = async () => {
     } catch (err) {
         console.error("Error compiling SCSS with esbuild:", err);
     }
+
+    fs.copyFileSync("./node_modules/testeranto-stilo/src/logo.svg", "./logo.svg");
     
     // Copy newStyle.css
     // try {
