@@ -96,15 +96,6 @@ const buildAll = async () => {
     );
     console.log("Generated: index.html");
 
-    // Process README.md
-    try {
-        const readmeHtml = processFile("./README.md");
-        fs.writeFileSync(path.join("./", "README.html"), readmeHtml);
-        console.log("Generated: README.html");
-    } catch (err) {
-        console.error("Error processing README.md:", err);
-    }
-
     // Process docs
     const docsHtml = processFile("templates/docs.md");
     fs.writeFileSync(path.join("./", "docs.html"), docsHtml);
@@ -167,13 +158,6 @@ const main = async () => {
             }
         });
         
-        // Watch README.md
-        fs.watch('./README.md', (eventType, filename) => {
-            if (filename) {
-                console.log(`File ${filename} changed. Rebuilding...`);
-                buildAll();
-            }
-        });
     }
 
     // Copy fonts from testeranto-stilo package
